@@ -61,9 +61,16 @@ stages:
 
               # Resource group name read from parameter file
               action: 'Create Or Update Resource Group'
-              resourceGroupName: ${{ fromJson(file('parameters/' + parameters.environment + '/rg.parameters.json')).parameters.rgName.value }}
+               # Resource Group name from parameter file
+              resourceGroupName: >-
+                ${{ fromJson(file(
+                    format('parameters/{0}/rg.parameters.json', parameters.environment)
+                )).parameters.rgName.value }}
 
-              location: ${{ fromJson(file('parameters/' + parameters.environment + '/rg.parameters.json')).parameters.location.value }}
+              location: >-
+                ${{ fromJson(file(
+                    format('parameters/{0}/rg.parameters.json', parameters.environment)
+                )).parameters.location.value }}
 
               templateLocation: 'Linked artifact'
               csmFile: 'resource-group-level/main.bicep'
