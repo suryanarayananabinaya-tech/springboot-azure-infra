@@ -1,0 +1,72 @@
+trigger: none
+
+parameters:
+  - name: environment
+    displayName: Deployment Environment
+    type: string
+    default: dev
+    values:
+      - dev
+      - prod
+
+  - name: serviceConnection
+    displayName: Azure Service Connection Name
+    type: string
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: DeployInfrastructure
+    displayName: Deploy Azure Infrastructure
+    jobs:
+      - job: Deploy
+        displayName: Bicep Deployment
+        steps:
+
+          # ----------- 1: Read subscriptionId from parameter file -----------
+          - bash: |
+              echo "Reading subscriptionId from parameter file..."
+
+              FILE="parameters/${{ parameters.environment }}/main.parameters.json"
+
+              SUBSCRIPTION_ID=$(jq -r '.parameters.subscriptionId.value' $FILE)
+
+              echo "Found subscriptionId: $SUBSCRIPTION_ID"
+
+              echo "##vso[task.setvariable variable=subscriptionId]$SUBSCRIPTION_ID"
+            displayName: Get subscriptionId from parameters
+
+          # ----------- 2: Create Resource Group (subscription level) -----------
+          - task: AzureResourceManagerTemplateDeployment@3
+            displayName: Deploy Resource Group
+            inputs:
+              deploymentScope: 'Subscription'
+              azureResourceManagerConnection: ${{ parameters.serviceConnection }}
+              subscriptionId: $(subscriptionId)
+              location: 'eastus'
+              templateLocation: 'Linked artifact'
+              csmFile: 'subscription-level/rg.bicep'
+              csmParametersFile: 'parameters/${{ parameters.environment }}/rg.parameters.json'
+              deploymentMode: Incremental
+              deploymentName: rg-deployment-${{ parameters.environment }}
+
+          # ----------- 3: Deploy Resources to that Resource Group -----------
+          - task: AzureResourceManagerTemplateDeployment@3
+            displayName: Deploy Resource Group Level Resources
+            inputs:
+              deploymentScope: 'ResourceGroup'
+              azureResourceManagerConnection: ${{ parameters.serviceConnection }}
+              subscriptionId: $(subscriptionId)
+
+              # Resource group name read from parameter file
+              action: 'Create Or Update Resource Group'
+              resourceGroupName: ${{ fromJson(file('parameters/' + parameters.environment + '/rg.parameters.json')).parameters.rgName.value }}
+
+              location: ${{ fromJson(file('parameters/' + parameters.environment + '/rg.parameters.json')).parameters.location.value }}
+
+              templateLocation: 'Linked artifact'
+              csmFile: 'resource-group-level/main.bicep'
+              csmParametersFile: 'parameters/${{ parameters.environment }}/main.parameters.json'
+              deploymentMode: Incremental
+              deploymentName: rg-resources-${{ parameters.environment }}
