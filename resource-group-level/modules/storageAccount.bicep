@@ -1,15 +1,16 @@
 param storageAccountName string
 param location string
-param storageSku string
-param storageKind string
+param sku string
+param kind string
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2022-09-01' = {
   name: storageAccountName
   location: location
   sku: {
-    name: storageSku
+    name: sku
   }
-  kind: storageKind
+  kind: kind
+  properties: {}
 }
 
 output storageId string = storageAccount.id

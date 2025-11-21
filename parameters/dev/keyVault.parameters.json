@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": 
+  {
+    "name": {
+         "value": "dev-keyvault" 
+    },
+    "location": {
+         "value": "eastus" 
+    },
+    "tenantId": {
+         "value": "1aae31e0-8eaf-4e9e-9938-467c5739beca"
+    },
+    "objectId": {
+         "value": "db6e88b4-975f-464a-83ed-cd7b157e8345" }
+  }
+}

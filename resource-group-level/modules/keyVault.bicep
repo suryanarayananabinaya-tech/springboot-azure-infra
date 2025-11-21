@@ -1,6 +1,7 @@
 param name string
 param location string
 param tenantId string
+param objectId string
 
 resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
   name: name
@@ -13,7 +14,18 @@ resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
     tenantId: tenantId
     enableSoftDelete: true
     enablePurgeProtection: false
-    accessPolicies: []
+    enabledForDeployment: true
+    enabledForTemplateDeployment: true
+    accessPolicies: [
+      {
+        tenantId: tenantId
+        objectId: objectId
+        permissions: {
+          keys: ['get', 'list', 'create', 'delete']
+          secrets: ['get', 'list', 'set', 'delete']
+        }
+      }
+    ]
   }
 }
 

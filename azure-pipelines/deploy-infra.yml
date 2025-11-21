@@ -13,67 +13,195 @@ parameters:
     displayName: Azure Service Connection Name
     type: string
 
+  - name: deployRG
+    type: boolean
+    default: true
+
+  - name: logAnalyticsWorkspace
+    type: boolean
+    default: false
+
+  - name: appInsights
+    type: boolean
+    default: false
+
+  - name: appServicePlan
+    type: boolean
+    default: false
+
+    - name: appService
+    type: boolean
+    default: false
+
+  - name: keyVault
+    type: boolean
+    default: false
+
+  - name: storageAccount
+    type: boolean
+    default: false
+
+# ---------------------------------------------------
+# GLOBAL VARIABLE IMPORT (READS JSON ONCE)
+# ---------------------------------------------------
+variables:
+  mainParams: ${{ fromJson(file(format('parameters/{0}/main.parameters.json', parameters.environment))) }}
+
+  subscriptionId: ${{ variables.mainParams.parameters.subscriptionId.value }}
+  rgName: ${{ variables.mainParams.parameters.rgName.value }}
+  location: ${{ variables.mainParams.parameters.location.value }}
+
+
 pool:
   vmImage: ubuntu-latest
 
+
+# ---------------------------------------------------
+# STAGES
+# ---------------------------------------------------
 stages:
   - stage: DeployInfrastructure
     displayName: Deploy Azure Infrastructure
     jobs:
       - job: Deploy
-        displayName: Bicep Deployment
+        displayName: Deploy Azure Resources
         steps:
 
-          # ----------- 1: Read subscriptionId from parameter file -----------
-          - bash: |
-              echo "Reading subscriptionId from parameter file..."
-
-              FILE="parameters/${{ parameters.environment }}/main.parameters.json"
-
-              SUBSCRIPTION_ID=$(jq -r '.parameters.subscriptionId.value' $FILE)
-
-              echo "Found subscriptionId: $SUBSCRIPTION_ID"
-
-              echo "##vso[task.setvariable variable=subscriptionId]$SUBSCRIPTION_ID"
-            displayName: Get subscriptionId from parameters
-
-          # ----------- 2: Create Resource Group (subscription level) -----------
+          # -------------------------------------------------------
+          # RESOURCE GROUP DEPLOYMENT
+          # -------------------------------------------------------
           - task: AzureResourceManagerTemplateDeployment@3
             displayName: Deploy Resource Group
+            condition: |
+              and(succeeded(), eq('${{ parameters.deployRG }}', 'true'))
             inputs:
               deploymentScope: 'Subscription'
               azureResourceManagerConnection: ${{ parameters.serviceConnection }}
-              subscriptionId: $(subscriptionId)
+              subscriptionId: ${{ variables.subscriptionId }}
               location: 'eastus'
               templateLocation: 'Linked artifact'
               csmFile: 'subscription-level/rg.bicep'
               csmParametersFile: 'parameters/${{ parameters.environment }}/rg.parameters.json'
               deploymentMode: Incremental
-              deploymentName: rg-deployment-${{ parameters.environment }}
-
-          # ----------- 3: Deploy Resources to that Resource Group -----------
+              deploymentName: rg-${{ parameters.environment }}
+          # -------------------------------------------------------
+          # Log Analytics Workspace DEPLOYMENT
+          # -------------------------------------------------------
           - task: AzureResourceManagerTemplateDeployment@3
-            displayName: Deploy Resource Group Level Resources
+            displayName: Deploy Log Analytics Workspace
+            condition: |
+              and(succeeded(), eq('${{ parameters.logAnalyticsWorkspace }}', 'true'))
             inputs:
               deploymentScope: 'ResourceGroup'
               azureResourceManagerConnection: ${{ parameters.serviceConnection }}
-              subscriptionId: $(subscriptionId)
-
-              # Resource group name read from parameter file
+              subscriptionId: ${{ variables.subscriptionId }}
               action: 'Create Or Update Resource Group'
-               # Resource Group name from parameter file
-              resourceGroupName: >-
-                ${{ fromJson(file(
-                    format('parameters/{0}/rg.parameters.json', parameters.environment)
-                )).parameters.rgName.value }}
-
-              location: >-
-                ${{ fromJson(file(
-                    format('parameters/{0}/rg.parameters.json', parameters.environment)
-                )).parameters.location.value }}
-
+              resourceGroupName: ${{ variables.rgName }}
+              location: ${{ variables.location }}
               templateLocation: 'Linked artifact'
-              csmFile: 'resource-group-level/main.bicep'
-              csmParametersFile: 'parameters/${{ parameters.environment }}/main.parameters.json'
+              csmFile: 'resource-group-level/modules/logAnalytics.bicep'
+              csmParametersFile: 'parameters/${{ parameters.environment }}/logAnalytics.parameters.json'
               deploymentMode: Incremental
-              deploymentName: rg-resources-${{ parameters.environment }}
+              deploymentName: loganalytics-${{ parameters.environment }}
+
+             # -------------------------------------------------------
+          # AppInsights DEPLOYMENT
+          # -------------------------------------------------------
+          - task: AzureResourceManagerTemplateDeployment@3
+            displayName: Deploy AppInsights
+            condition: |
+              and(succeeded(), eq('${{ parameters.appInsights }}', 'true'))
+            inputs:
+              deploymentScope: 'ResourceGroup'
+              azureResourceManagerConnection: ${{ parameters.serviceConnection }}
+              subscriptionId: ${{ variables.subscriptionId }}
+              action: 'Create Or Update Resource Group'
+              resourceGroupName: ${{ variables.rgName }}
+              location: ${{ variables.location }}
+              templateLocation: 'Linked artifact'
+              csmFile: 'resource-group-level/modules/appInsights.bicep'
+              csmParametersFile: 'parameters/${{ parameters.environment }}/appInsights.parameters.json'
+              deploymentMode: Incremental
+              deploymentName: appInsights-${{ parameters.environment }}
+
+             # -------------------------------------------------------
+          # Appservice plan DEPLOYMENT
+          # -------------------------------------------------------
+          - task: AzureResourceManagerTemplateDeployment@3
+            displayName: Deploy appServicePlan
+            condition: |
+              and(succeeded(), eq('${{ parameters.appServicePlan }}', 'true'))
+            inputs:
+              deploymentScope: 'ResourceGroup'
+              azureResourceManagerConnection: ${{ parameters.serviceConnection }}
+              subscriptionId: ${{ variables.subscriptionId }}
+              action: 'Create Or Update Resource Group'
+              resourceGroupName: ${{ variables.rgName }}
+              location: ${{ variables.location }}
+              templateLocation: 'Linked artifact'
+              csmFile: 'resource-group-level/modules/appServicePlan.bicep'
+              csmParametersFile: 'parameters/${{ parameters.environment }}/appServicePlan.parameters.json'
+              deploymentMode: Incremental
+              deploymentName: appServicePlan-${{ parameters.environment }}
+
+             # -------------------------------------------------------
+          # appService DEPLOYMENT
+          # -------------------------------------------------------
+          - task: AzureResourceManagerTemplateDeployment@3
+            displayName: Deploy appService 
+            condition: |
+              and(succeeded(), eq('${{ parameters.appService }}', 'true'))
+            inputs:
+              deploymentScope: 'ResourceGroup'
+              azureResourceManagerConnection: ${{ parameters.serviceConnection }}
+              subscriptionId: ${{ variables.subscriptionId }}
+              action: 'Create Or Update Resource Group'
+              resourceGroupName: ${{ variables.rgName }}
+              location: ${{ variables.location }}
+              templateLocation: 'Linked artifact'
+              csmFile: 'resource-group-level/modules/appService.bicep'
+              csmParametersFile: 'parameters/${{ parameters.environment }}/appService.parameters.json'
+              deploymentMode: Incremental
+              deploymentName: appService-${{ parameters.environment }}
+
+             # -------------------------------------------------------
+          # Keyvault  DEPLOYMENT
+          # -------------------------------------------------------
+          - task: AzureResourceManagerTemplateDeployment@3
+            displayName: Deploy keyVault 
+            condition: |
+              and(succeeded(), eq('${{ parameters.keyVault }}', 'true'))
+            inputs:
+              deploymentScope: 'ResourceGroup'
+              azureResourceManagerConnection: ${{ parameters.serviceConnection }}
+              subscriptionId: ${{ variables.subscriptionId }}
+              action: 'Create Or Update Resource Group'
+              resourceGroupName: ${{ variables.rgName }}
+              location: ${{ variables.location }}
+              templateLocation: 'Linked artifact'
+              csmFile: 'resource-group-level/modules/keyVault.bicep'
+              csmParametersFile: 'parameters/${{ parameters.environment }}/keyVault.parameters.json'
+              deploymentMode: Incremental
+              deploymentName: keyVault-${{ parameters.environment }}
+
+             # -------------------------------------------------------
+          # storageAccount DEPLOYMENT
+          # -------------------------------------------------------
+          - task: AzureResourceManagerTemplateDeployment@3
+            displayName: Deploy storageAccount
+            condition: |
+              and(succeeded(), eq('${{ parameters.storageAccount }}', 'true'))
+            inputs:
+              deploymentScope: 'ResourceGroup'
+              azureResourceManagerConnection: ${{ parameters.serviceConnection }}
+              subscriptionId: ${{ variables.subscriptionId }}
+              action: 'Create Or Update Resource Group'
+              resourceGroupName: ${{ variables.rgName }}
+              location: ${{ variables.location }}
+              templateLocation: 'Linked artifact'
+              csmFile: 'resource-group-level/modules/storageAccount.bicep'
+              csmParametersFile: 'parameters/${{ parameters.environment }}/storageAccount.parameters.json'
+              deploymentMode: Incremental
+              deploymentName: storageAccount-${{ parameters.environment }}
+
+

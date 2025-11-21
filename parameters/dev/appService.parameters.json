@@ -1,0 +1,19 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": 
+  {
+    "name": { 
+        "value": "dev-webapp" 
+    },
+    "location": { 
+        "value": "eastus" 
+    },
+    "appServicePlanId": {
+         "value": "/subscriptions/fa7123f9-b573-4d68-a16f-9e06bce14bd9/resourceGroups/springboot-rg-dev/providers/Microsoft.Web/serverfarms/dev-appserviceplan" 
+    },
+    "appInsightsInstrumentationKey": { 
+        "value": "<appInsightsKey>" 
+    }
+  }
+}

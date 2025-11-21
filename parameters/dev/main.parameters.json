@@ -3,11 +3,14 @@
     "subscriptionId": {
       "value": "fa7123f9-b573-4d68-a16f-9e06bce14bd9"
     },
+     "rgName": { 
+       "value": "springboot-rg-dev"
+    },
+    "location": { 
+        "value": "eastus" 
+    },
     "tenantId": {
       "value": "1aae31e0-8eaf-4e9e-9938-467c5739beca"
-    },
-    "location": {
-      "value": "eastus"
     },
     "serviceConnectionName": {
       "value": "Abinaya-Azure-dev-Connection"
