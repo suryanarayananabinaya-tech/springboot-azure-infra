@@ -45,11 +45,7 @@ parameters:
 # GLOBAL VARIABLE IMPORT (READS JSON ONCE)
 # ---------------------------------------------------
 variables:
-  mainParams: ${{ fromJson(file(format('parameters/{0}/main.parameters.json', parameters.environment))) }}
-
-  subscriptionId: ${{ variables.mainParams.parameters.subscriptionId.value }}
-  rgName: ${{ variables.mainParams.parameters.rgName.value }}
-  location: ${{ variables.mainParams.parameters.location.value }}
+   - template: parameters/${{ parameters.environment }}/main.parameters.json
 
 
 pool:
@@ -77,8 +73,8 @@ stages:
             inputs:
               deploymentScope: 'Subscription'
               azureResourceManagerConnection: ${{ parameters.serviceConnection }}
-              subscriptionId: ${{ variables.subscriptionId }}
-              location: 'eastus'
+              subscriptionId: $(subscriptionId)
+              location: $(location)
               templateLocation: 'Linked artifact'
               csmFile: 'subscription-level/rg.bicep'
               csmParametersFile: 'parameters/${{ parameters.environment }}/rg.parameters.json'
@@ -94,10 +90,10 @@ stages:
             inputs:
               deploymentScope: 'ResourceGroup'
               azureResourceManagerConnection: ${{ parameters.serviceConnection }}
-              subscriptionId: ${{ variables.subscriptionId }}
+              subscriptionId: $(subscriptionId)
+              location: $(location)
               action: 'Create Or Update Resource Group'
-              resourceGroupName: ${{ variables.rgName }}
-              location: ${{ variables.location }}
+              resourceGroupName: $(rgName)
               templateLocation: 'Linked artifact'
               csmFile: 'resource-group-level/modules/logAnalytics.bicep'
               csmParametersFile: 'parameters/${{ parameters.environment }}/logAnalytics.parameters.json'
@@ -114,10 +110,10 @@ stages:
             inputs:
               deploymentScope: 'ResourceGroup'
               azureResourceManagerConnection: ${{ parameters.serviceConnection }}
-              subscriptionId: ${{ variables.subscriptionId }}
+              subscriptionId: $(subscriptionId)
+              location: $(location)
               action: 'Create Or Update Resource Group'
-              resourceGroupName: ${{ variables.rgName }}
-              location: ${{ variables.location }}
+              resourceGroupName: $(rgName)
               templateLocation: 'Linked artifact'
               csmFile: 'resource-group-level/modules/appInsights.bicep'
               csmParametersFile: 'parameters/${{ parameters.environment }}/appInsights.parameters.json'
@@ -134,10 +130,10 @@ stages:
             inputs:
               deploymentScope: 'ResourceGroup'
               azureResourceManagerConnection: ${{ parameters.serviceConnection }}
-              subscriptionId: ${{ variables.subscriptionId }}
+              subscriptionId: $(subscriptionId)
+              location: $(location)
               action: 'Create Or Update Resource Group'
-              resourceGroupName: ${{ variables.rgName }}
-              location: ${{ variables.location }}
+              resourceGroupName: $(rgName)
               templateLocation: 'Linked artifact'
               csmFile: 'resource-group-level/modules/appServicePlan.bicep'
               csmParametersFile: 'parameters/${{ parameters.environment }}/appServicePlan.parameters.json'
@@ -154,10 +150,10 @@ stages:
             inputs:
               deploymentScope: 'ResourceGroup'
               azureResourceManagerConnection: ${{ parameters.serviceConnection }}
-              subscriptionId: ${{ variables.subscriptionId }}
+              subscriptionId: $(subscriptionId)
+              location: $(location)
               action: 'Create Or Update Resource Group'
-              resourceGroupName: ${{ variables.rgName }}
-              location: ${{ variables.location }}
+              resourceGroupName: $(rgName)
               templateLocation: 'Linked artifact'
               csmFile: 'resource-group-level/modules/appService.bicep'
               csmParametersFile: 'parameters/${{ parameters.environment }}/appService.parameters.json'
@@ -174,10 +170,10 @@ stages:
             inputs:
               deploymentScope: 'ResourceGroup'
               azureResourceManagerConnection: ${{ parameters.serviceConnection }}
-              subscriptionId: ${{ variables.subscriptionId }}
+              subscriptionId: $(subscriptionId)
+              location: $(location)
               action: 'Create Or Update Resource Group'
-              resourceGroupName: ${{ variables.rgName }}
-              location: ${{ variables.location }}
+              resourceGroupName: $(rgName)
               templateLocation: 'Linked artifact'
               csmFile: 'resource-group-level/modules/keyVault.bicep'
               csmParametersFile: 'parameters/${{ parameters.environment }}/keyVault.parameters.json'
@@ -194,10 +190,10 @@ stages:
             inputs:
               deploymentScope: 'ResourceGroup'
               azureResourceManagerConnection: ${{ parameters.serviceConnection }}
-              subscriptionId: ${{ variables.subscriptionId }}
+              subscriptionId: $(subscriptionId)
+              location: $(location)
               action: 'Create Or Update Resource Group'
-              resourceGroupName: ${{ variables.rgName }}
-              location: ${{ variables.location }}
+              resourceGroupName: $(rgName)
               templateLocation: 'Linked artifact'
               csmFile: 'resource-group-level/modules/storageAccount.bicep'
               csmParametersFile: 'parameters/${{ parameters.environment }}/storageAccount.parameters.json'
