@@ -29,7 +29,7 @@ parameters:
     type: boolean
     default: false
 
-    - name: appService
+  - name: appService
     type: boolean
     default: false
 
