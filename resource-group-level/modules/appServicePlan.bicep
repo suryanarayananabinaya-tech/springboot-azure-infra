@@ -1,13 +1,13 @@
 param name string
 param location string
-param sku string
+param skuName string
 param skuCapacity int = 1
 
 resource plan 'Microsoft.Web/serverfarms@2022-03-01' = {
   name: name
   location: location
   sku: {
-    name: sku
+    name: skuName
     tier: 'Basic'
     capacity: skuCapacity
   }
