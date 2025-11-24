@@ -4,7 +4,7 @@ param sku string
 param skuCapacity int = 1
 
 resource plan 'Microsoft.Web/serverfarms@2022-03-01' = {
-  name: appServicePlanName
+  name: name
   location: location
   sku: {
     name: sku
