@@ -27,7 +27,7 @@ parameters:
 
   - name: appServicePlan
     type: boolean
-    default: true
+    default: false
 
   - name: appService
     type: boolean
@@ -35,7 +35,7 @@ parameters:
 
   - name: keyVault
     type: boolean
-    default: false
+    default: true
 
   - name: storageAccount
     type: boolean
