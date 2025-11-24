@@ -8,7 +8,7 @@ resource plan 'Microsoft.Web/serverfarms@2022-03-01' = {
   location: location
   sku: {
     name: skuName
-    tier: 'Basic'
+    tier: 'Free'
     capacity: skuCapacity
   }
 }
