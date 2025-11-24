@@ -64,6 +64,14 @@ stages:
       - job: Deploy
         displayName: Deploy Azure Resources
         steps:
+          # -------------------------------------------------------
+          # DEBUG VARIABLES
+          # -------------------------------------------------------
+          - script: |
+              echo Subscription ID: $(subscriptionId)
+              echo Service Connection: $(serviceConnectionName)
+              echo Location: $(location)
+            displayName: "Check variables"
 
           # -------------------------------------------------------
           # RESOURCE GROUP DEPLOYMENT
@@ -74,7 +82,7 @@ stages:
               and(succeeded(), eq('${{ parameters.deployRG }}', 'true'))
             inputs:
               deploymentScope: 'Subscription'
-              azureResourceManagerConnection: $(serviceConnectionName)
+              azureResourceManagerConnection: ${{ parameters.serviceConnection }}
               subscriptionId: $(subscriptionId)
               location: $(location)
               templateLocation: 'Linked artifact'
