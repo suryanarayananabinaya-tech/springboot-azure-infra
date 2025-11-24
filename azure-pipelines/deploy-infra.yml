@@ -45,10 +45,7 @@ parameters:
 # GLOBAL VARIABLE IMPORT (READS JSON ONCE)
 # ---------------------------------------------------
 variables:
-  mainParams: ${{ fromJson(file(format('parameters/{0}/main.parameters.json', parameters.environment))) }}
-  subscriptionId: ${{ variables.mainParams.subscriptionId }}
-  location: ${{ variables.mainParams.location }}
-  rgName: ${{ variables.mainParams.rgName }}
+  - template: parameters/${{ parameters.environment }}/main.parameters.yml
 # ---------------------------------------------------
 
 
