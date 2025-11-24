@@ -79,7 +79,7 @@ stages:
               location: $(location)
               templateLocation: 'Linked artifact'
               csmFile: 'subscription-level/rg.bicep'
-              csmParametersFile: 'parameters/${{ parameters.environment }}/rg.parameters.json'
+              csmParametersFile: 'azure-pipelines/parameters/${{ parameters.environment }}/rg.parameters.json'
               deploymentMode: Incremental
               deploymentName: rg-${{ parameters.environment }}
           # -------------------------------------------------------
