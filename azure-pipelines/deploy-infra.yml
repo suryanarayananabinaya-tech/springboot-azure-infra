@@ -15,11 +15,11 @@ parameters:
 
   - name: deployRG
     type: boolean
-    default: true
+    default: false
 
   - name: logAnalyticsWorkspace
     type: boolean
-    default: false
+    default: true
 
   - name: appInsights
     type: boolean
@@ -98,7 +98,7 @@ stages:
             condition: |
               and(succeeded(), eq('${{ parameters.logAnalyticsWorkspace }}', 'true'))
             inputs:
-              deploymentScope: 'ResourceGroup'
+              deploymentScope: 'Resource Group'
               azureResourceManagerConnection: ${{ parameters.serviceConnection }}
               subscriptionId: $(subscriptionId)
               location: $(location)
@@ -106,7 +106,7 @@ stages:
               resourceGroupName: $(rgName)
               templateLocation: 'Linked artifact'
               csmFile: 'resource-group-level/modules/logAnalytics.bicep'
-              csmParametersFile: 'parameters/${{ parameters.environment }}/logAnalytics.parameters.json'
+              csmParametersFile: 'azure-pipelines/parameters/${{ parameters.environment }}/logAnalytics.parameters.json'
               deploymentMode: Incremental
               deploymentName: loganalytics-${{ parameters.environment }}
 
