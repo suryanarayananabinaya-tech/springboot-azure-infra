@@ -1,42 +1,14 @@
-parameters:
-  subscriptionId:
-    value: "fa7123f9-b573-4d68-a16f-9e06bce14bd9"
-
-  rgName:
-    value: "springboot-rg-dev"
-
-  location:
-    value: "eastus"
-
-  tenantId:
-    value: "1aae31e0-8eaf-4e9e-9938-467c5739beca"
-
-  serviceConnectionName:
-    value: "Abinaya-Azure-dev-Connection"
-
-  appServicePlanName:
-    value: "springboot-d-appServiceplan"
-
-  appServiceName:
-    value: "springboot-d-appService"
-
-  sku:
-    value: "B1"
-
-  storageAccountName:
-    value: "springboot-sad01"
-
-  keyVaultName:
-    value: "springboot-d-kv"
-
-  appInsightsName:
-    value: "springboot-d-ai"
-
-  logAnalyticsName:
-    value: "springboot-d-log"
-
-  storageSku:
-    value: "Standard_LRS"
-
-  storageKind:
-    value: "StorageV2"
+subscriptionId: fa7123f9-b573-4d68-a16f-9e06bce14bd9
+rgName: springboot-rg-dev
+location: eastus
+tenantId: 1aae31e0-8eaf-4e9e-9938-467c5739beca
+serviceConnectionName: Abinaya-Azure-dev-Connection
+appServicePlanName: springboot-d-appServiceplan
+appServiceName: springboot-d-appService
+sku: B1
+storageAccountName: springboot-sad01
+keyVaultName: springboot-d-kv
+appInsightsName: springboot-d-ai
+logAnalyticsName: springboot-d-log
+storageSku: Standard_LRS
+storageKind: StorageV2
