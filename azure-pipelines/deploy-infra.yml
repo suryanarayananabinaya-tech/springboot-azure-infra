@@ -45,7 +45,12 @@ parameters:
 # GLOBAL VARIABLE IMPORT (READS JSON ONCE)
 # ---------------------------------------------------
 variables:
-   - template: azure-pipelines/parameters/${{ parameters.environment }}/main.parameters.json
+  mainParams: ${{ fromJson(file(format('parameters/{0}/main.parameters.json', parameters.environment))) }}
+  subscriptionId: ${{ variables.mainParams.subscriptionId }}
+  location: ${{ variables.mainParams.location }}
+  rgName: ${{ variables.mainParams.rgName }}
+# ---------------------------------------------------
+
 
 
 pool:
