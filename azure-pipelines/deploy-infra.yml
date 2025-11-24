@@ -45,7 +45,7 @@ parameters:
 # GLOBAL VARIABLE IMPORT (READS JSON ONCE)
 # ---------------------------------------------------
 variables:
-  - template: parameters/${{ parameters.environment }}/main.parameters.yml
+  - template: azurePipelines/parameters/${{ parameters.environment }}/main.parameters.yml
 # ---------------------------------------------------
 
 
@@ -74,7 +74,7 @@ stages:
               and(succeeded(), eq('${{ parameters.deployRG }}', 'true'))
             inputs:
               deploymentScope: 'Subscription'
-              azureResourceManagerConnection: ${{ parameters.serviceConnection }}
+              azureResourceManagerConnection: $(serviceConnectionName)
               subscriptionId: $(subscriptionId)
               location: $(location)
               templateLocation: 'Linked artifact'
