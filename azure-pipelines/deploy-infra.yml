@@ -75,8 +75,8 @@ stages:
             inputs:
               deploymentScope: 'Subscription'
               azureResourceManagerConnection: ${{ parameters.serviceConnection }}
-              subscriptionId: ${{ parameters.subscriptionId }}
-              location: ${{ parameters.location }}
+              subscriptionId: $(subscriptionId)
+              location: $(location)
               templateLocation: 'Linked artifact'
               csmFile: 'subscription-level/rg.bicep'
               csmParametersFile: 'azure-pipelines/parameters/${{ parameters.environment }}/rg.parameters.json'
