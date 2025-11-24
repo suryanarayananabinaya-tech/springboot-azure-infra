@@ -9,7 +9,7 @@
     "location": {
          "value": "eastus" 
     },
-    "skuName": {
+    "sku": {
          "value": "F1" 
     },
     "skuCapacity": {
