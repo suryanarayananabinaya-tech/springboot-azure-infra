@@ -45,7 +45,7 @@ parameters:
 # GLOBAL VARIABLE IMPORT (READS JSON ONCE)
 # ---------------------------------------------------
 variables:
-   - template: parameters/${{ parameters.environment }}/main.parameters.json
+   - template: azure-pipelines/parameters/${{ parameters.environment }}/main.parameters.json
 
 
 pool:
