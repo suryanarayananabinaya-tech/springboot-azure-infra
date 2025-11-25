@@ -7,6 +7,7 @@ param appInsightsKey string
 resource webApp 'Microsoft.Web/sites@2022-09-01' = {
   name: appServiceName
   location: location
+  kind: 'app'  // Windows App Service
   properties: {
     serverFarmId: appServicePlanId
     siteConfig: {
