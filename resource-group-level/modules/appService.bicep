@@ -10,7 +10,9 @@ resource webApp 'Microsoft.Web/sites@2022-09-01' = {
   properties: {
     serverFarmId: appServicePlanId
     siteConfig: {
-      linuxFxVersion: 'JAVA|17'        // Runtime Stack: Java 17 on Linux
+      javaVersion: '17'            // Java 17 runtime
+      javaContainer: 'JAVA SE'     // Use Java SE container
+      javaContainerVersion: '17'   // Match the Java version
       appSettings: [
         {
           name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
