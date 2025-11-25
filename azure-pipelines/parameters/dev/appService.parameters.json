@@ -4,7 +4,7 @@
   "parameters": 
   {
     "appServiceName": { 
-        "value": "dev-webapp" 
+        "value": "dev-abinaya-eastus-webapp"
     },
     "location": { 
         "value": "eastus" 
