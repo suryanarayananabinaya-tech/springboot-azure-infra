@@ -4,7 +4,7 @@
   "parameters": 
   {
     "name": {
-         "value": "dev-keyvault001" 
+         "value": "dev-kv-abinaya-eastus" 
     },
     "location": {
          "value": "eastus" 
