@@ -13,7 +13,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
     }
     tenantId: tenantId
     enableSoftDelete: true
-    enablePurgeProtection: false
+    enablePurgeProtection: true
     enabledForDeployment: true
     enabledForTemplateDeployment: true
     accessPolicies: [
