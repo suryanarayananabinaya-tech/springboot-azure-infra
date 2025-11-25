@@ -27,11 +27,11 @@ parameters:
 
   - name: appServicePlan
     type: boolean
-    default: true
+    default: false
 
   - name: appService
     type: boolean
-    default: false
+    default: true
 
   - name: keyVault
     type: boolean

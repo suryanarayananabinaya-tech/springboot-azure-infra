@@ -12,8 +12,11 @@
     "appServicePlanId": {
          "value": "/subscriptions/fa7123f9-b573-4d68-a16f-9e06bce14bd9/resourceGroups/springboot-rg-dev/providers/Microsoft.Web/serverfarms/dev-appserviceplan" 
     },
-    "appInsightsInstrumentationKey": { 
-        "value": "<appInsightsKey>" 
+    "appInsightsConnectionString": {
+      "value": "InstrumentationKey=d6a0ec34-9bee-4926-af9d-51a092401594;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/;ApplicationId=181cb10e-b5c9-4dbd-b494-7af64232dc56"
+    },
+    "appInsightsKey": {
+      "value": "d6a0ec34-9bee-4926-af9d-51a092401594"
     }
   }
 }

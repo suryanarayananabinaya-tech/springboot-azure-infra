@@ -1,6 +1,7 @@
 param appServiceName string
 param location string
 param appServicePlanId string
+param appInsightsConnectionString string
 param appInsightsKey string
 
 resource webApp 'Microsoft.Web/sites@2022-09-01' = {
@@ -11,12 +12,12 @@ resource webApp 'Microsoft.Web/sites@2022-09-01' = {
     siteConfig: {
       appSettings: [
         {
-          name: 'APPLICATION INSIGHTS_CONNECTION_STRING'
-          value: appInsightsKey
+          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+          value: appInsightsConnectionString
         }
         {
-          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-          value: 'InstrumentationKey=${appInsightsKey}'
+          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          value: appInsightsKey
         }
       ]
     }
