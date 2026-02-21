@@ -12,8 +12,10 @@ param allowAzureServices bool = true
 @description('Optional: single client IP to allow, e.g. 203.0.113.10. Empty = skip.')
 param clientIp string = ''
 
+var uniqueSqlServerName = '${sqlServerName}-${uniqueString(resourceGroup().id)}'
+
 resource sqlServer 'Microsoft.Sql/servers@2022-05-01-preview' = {
-  name: sqlServerName
+  name: uniqueSqlServerName
   location: location
   properties: {
     administratorLogin: sqlAdminLogin
@@ -57,5 +59,5 @@ resource allowClientIp 'Microsoft.Sql/servers/firewallRules@2022-05-01-preview' 
   }
 }
 
-output sqlServerFqdn string = '${sqlServerName}.database.windows.net'
+output sqlServerFqdn string = '${uniqueSqlServerName}.database.windows.net'
 output sqlDatabaseName string = sqlDbName
