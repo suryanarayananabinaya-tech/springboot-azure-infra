@@ -1,0 +1,31 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": 
+  {
+    "sqlServerName": {
+      "value": "springboot-d-sqlsvr"
+    },
+    "location": {
+      "value": "eastus"
+    },
+    "administratorLogin": {
+      "value": "sqladminuser"
+    },
+    "administratorLoginPassword": {
+      "value": "ChangeM3-SqlAdmin-Pass!"
+    },
+    "databaseName": {
+      "value": "springbootdb"
+    },
+    "databaseSkuName": {
+      "value": "Basic"
+    },
+    "databaseSkuTier": {
+      "value": "Basic"
+    },
+    "maxSizeBytes": {
+      "value": 2147483648
+    }
+  }
+}

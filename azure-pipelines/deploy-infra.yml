@@ -41,6 +41,10 @@ parameters:
     type: boolean
     default: false
 
+  - name: sqlServer
+    type: boolean
+    default: false
+
 # ---------------------------------------------------
 # GLOBAL VARIABLE IMPORT (READS JSON ONCE)
 # ---------------------------------------------------
@@ -211,3 +215,23 @@ stages:
               deploymentName: storageAccount-${{ parameters.environment }}
 
 
+
+             # -------------------------------------------------------
+          # Azure SQL Server + Database DEPLOYMENT
+          # -------------------------------------------------------
+          - task: AzureResourceManagerTemplateDeployment@3
+            displayName: Deploy sqlServer
+            condition: |
+              and(succeeded(), eq('${{ parameters.sqlServer }}', 'true'))
+            inputs:
+              deploymentScope: 'Resource Group'
+              azureResourceManagerConnection: ${{ parameters.serviceConnection }}
+              subscriptionId: $(subscriptionId)
+              location: $(location)
+              action: 'Create Or Update Resource Group'
+              resourceGroupName: $(rgName)
+              templateLocation: 'Linked artifact'
+              csmFile: 'resource-group-level/modules/sqlServer.bicep'
+              csmParametersFile: 'azure-pipelines/parameters/${{ parameters.environment }}/sqlServer.parameters.json'
+              deploymentMode: Incremental
+              deploymentName: sqlServer-${{ parameters.environment }}
