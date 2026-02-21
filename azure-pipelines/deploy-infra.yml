@@ -50,6 +50,7 @@ parameters:
 # GLOBAL VARIABLE IMPORT (READS JSON ONCE)
 # ---------------------------------------------------
 variables:
+  - group: vg-dev-secrets
   - template: parameters/${{ parameters.environment }}/main.parameters.yml
 # ---------------------------------------------------
 
