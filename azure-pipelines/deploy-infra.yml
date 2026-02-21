@@ -41,10 +41,6 @@ parameters:
     type: boolean
     default: false
 
-  - name: sqlDb
-    type: boolean
-    default: true
-
 # ---------------------------------------------------
 # GLOBAL VARIABLE IMPORT (READS JSON ONCE)
 # ---------------------------------------------------
@@ -213,28 +209,5 @@ stages:
               csmParametersFile: 'azure-pipelines/parameters/${{ parameters.environment }}/storageAccount.parameters.json'
               deploymentMode: Incremental
               deploymentName: storageAccount-${{ parameters.environment }}
-
-          
-                      # -------------------------------------------------------
-          # Azure SQL Server + SQL Database (Basic) DEPLOYMENT
-          # -------------------------------------------------------
-          - task: AzureResourceManagerTemplateDeployment@3
-            displayName: Deploy Azure SQL (Server + DB)
-            condition: |
-              and(succeeded(), eq('${{ parameters.sqlDb }}', 'true'))
-            inputs:
-              deploymentScope: 'Resource Group'
-              azureResourceManagerConnection: ${{ parameters.serviceConnection }}
-              subscriptionId: $(subscriptionId)
-              location: $(location)
-              action: 'Create Or Update Resource Group'
-              resourceGroupName: $(rgName)
-              templateLocation: 'Linked artifact'
-              csmFile: 'resource-group-level/modules/sqlDb.bicep'
-              csmParametersFile: 'azure-pipelines/parameters/${{ parameters.environment }}/sqlDb.parameters.json'
-              overrideParameters: >
-                       -sqlAdminPassword "$(SQL_ADMIN_PASSWORD)"
-              deploymentMode: Incremental
-              deploymentName: sql-${{ parameters.environment }}
 
 
