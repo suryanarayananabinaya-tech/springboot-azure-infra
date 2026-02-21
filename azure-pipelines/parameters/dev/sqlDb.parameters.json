@@ -7,6 +7,6 @@
     "sqlDbName": { "value": "appdb" },
     "sqlAdminLogin": { "value": "sqladminuser" },
     "allowAzureServices": { "value": true },
-    "clientIp": { "value": "" }
+    "clientIp": { "value": "173.63.53.176" }
   }
 }
