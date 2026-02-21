@@ -41,6 +41,10 @@ parameters:
     type: boolean
     default: false
 
+  - name: sqlServer
+    type: boolean
+    default: true
+
     
 # ---------------------------------------------------
 # GLOBAL VARIABLE IMPORT (READS JSON ONCE)
