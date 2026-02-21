@@ -41,7 +41,7 @@ parameters:
     type: boolean
     default: false
 
-  - name: sqlServer
+  - name: sqlDb
     type: boolean
     default: true
 
